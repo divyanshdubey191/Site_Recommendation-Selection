@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Suggested Venues For You</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	
+</head>
+<body>
+
+<div class="jumbotron text-center">
+	<h2 style="color:#3f3f3f">Venue Recommendation System</h2>
+	<p>Plotted below on markers are the suggested venues for you</p>
+</div>
+	
+<div class="container">
+
+	<div id="map" style="height:350px;"></div>
+	<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+	    </script>
+	<script
+	    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRTF9zhjUAcLmc1AXY-qPwYeZrraX-mYU&libraries=geometry">
+	    </script>
+	
+	<script type="text/javascript">
+
+		var locations = [];
+		var label_tags = [];
+		{% for item in data %}
+		    fun1({{ item|safe }});
+		{% endfor %}
+
+		function fun1(item) {
+			//console.log(item);
+			locations.push({lat:item[0],lng:item[1]});
+			label_tags.push(item[2]);
+		}
+
+
+
+		setTimeout(function() {
+	       console.log("Wait a second");
+	       initMap();
+	  },1000);
+
+		function initMap()
+		{
+		 map = new google.maps.Map(document.getElementById('map'), {
+		   zoom: 9,
+		   center: {lat: 40.8, lng: -74},
+		   styles: [
+            {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+            {
+              featureType: 'administrative.locality',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'poi',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'geometry',
+              stylers: [{color: '#263c3f'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#6b9a76'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry',
+              stylers: [{color: '#38414e'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#212a37'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#9ca5b3'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry',
+              stylers: [{color: '#746855'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#1f2835'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#f3d19c'}]
+            },
+            {
+              featureType: 'transit',
+              elementType: 'geometry',
+              stylers: [{color: '#2f3948'}]
+            },
+            {
+              featureType: 'transit.station',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'geometry',
+              stylers: [{color: '#17263c'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#515c6d'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.stroke',
+              stylers: [{color: '#17263c'}]
+            }
+           ]
+		 });
+
+		 markers = locations.map(function(location, i) {
+		   return new google.maps.Marker({
+		     position: location
+		   });
+		 });
+		 
+
+
+		 // Add a marker clusterer to manage the markers.
+		 markerCluster = new MarkerClusterer(map, markers,
+		     {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+		}
+
+	</script>
+
+		
+	
+
+</div>
+
+</body>
+</html>
